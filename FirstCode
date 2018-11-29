@@ -1,0 +1,32 @@
+import numpy as np
+import pandas as pd
+import statsmodels
+import statsmodels.api as sm
+from sklearn.model_selection import train_test_split
+
+dataset = pd.read_csv("drug_consumption.csv")
+predictors = dataset.iloc[:, 1:12]
+y_actual = dataset.iloc[:, 13]
+X_train, X_test, y_train, y_test = train_test_split(X, y_actual)
+model = sm.MNLogit(y_train, sm.add_constant(X_train))
+results = model.fit()
+y_pred = results.predict(sm.add_constant(X_test))
+error = 0
+print(y_test.values[5])
+print(y_pred.values[5])
+
+print(results.pred_table())
+    
+
+"""
+for i in range(predictors.shape[1]):
+    X = predictors.iloc[:,i]
+    X_train, X_test, y_train, y_test = train_test_split(X, y_actual)
+    error = 0
+    model = sm.MNLogit(y_train, sm.add_constant(X_train))
+    y_pred = model.predict(sm.add_constant(X_test))
+    for i in range(len(y_pred)): 
+        if y_pred[i] != y_test[i]:
+            error += 1
+    error = error/len*y_pred
+"""
